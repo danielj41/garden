@@ -1,5 +1,18 @@
 // https://raw.githubusercontent.com/mdn/webgl-examples/gh-pages/tutorial/sample2/webgl-demo.js
 
+export interface ProgramInfo {
+  program: WebGLProgram;
+  attribLocations: {
+    vertexPosition: number;
+    [name: string]: number;
+  };
+  uniformLocations: {
+    projectionMatrix: WebGLUniformLocation;
+    modelViewMatrix: WebGLUniformLocation;
+    [name: string]: WebGLUniformLocation;
+  };
+}
+
 //
 // Initialize a shader program, so WebGL knows how to draw our data
 //
