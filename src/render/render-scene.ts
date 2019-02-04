@@ -4,21 +4,15 @@ import { mat4 } from "gl-matrix";
 import { ProgramInfo } from "../shaders/init";
 import { Buffers } from "../models/init";
 
-export interface Entity {
-  state: {};
-  render: (
-    env: any
-  ) => {
-    programInfo: ProgramInfo;
-    buffers: Buffers;
-    modelMatrix: mat4;
-  };
-}
+import { Entity, Task, Env, RenderTask } from "./types";
 
 //
 // Draw the scene.
 //
-export default function(gl: WebGLRenderingContext, entities: Entity[]) {
+export default function(
+  gl: WebGLRenderingContext,
+  entities: { [id: string]: Entity }
+) {
   gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
   gl.clearDepth(1.0); // Clear everything
   gl.enable(gl.DEPTH_TEST); // Enable depth testing
@@ -58,13 +52,19 @@ export default function(gl: WebGLRenderingContext, entities: Entity[]) {
     [-0.0, 0.0, -6.0]
   ); // amount to translate
 
-  for (const entity of entities) {
-    renderEntity(
-      gl,
-      projectionMatrix,
-      viewMatrix,
-      entity.render({ gl, state: entity.state })
-    );
+  for (const id in entities) {
+    const entity = entities[id];
+
+    const tasks = entity.tick({ gl, state: entity.state, id });
+
+    for (const task of tasks) {
+      if (task.type === "render") {
+        renderEntity(gl, projectionMatrix, viewMatrix, task);
+      }
+      if (task.type === "state-update") {
+        entities[task.id].state[task.key] = task.value;
+      }
+    }
   }
 }
 
@@ -72,15 +72,7 @@ function renderEntity(
   gl: WebGLRenderingContext,
   projectionMatrix: mat4,
   viewMatrix: mat4,
-  {
-    programInfo,
-    buffers,
-    modelMatrix
-  }: {
-    programInfo: ProgramInfo;
-    buffers: Buffers;
-    modelMatrix: mat4;
-  }
+  { programInfo, buffers, modelMatrix }: RenderTask
 ) {
   // Tell WebGL how to pull out the positions from the position
   // buffer into the vertexPosition attribute.

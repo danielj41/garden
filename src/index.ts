@@ -21,12 +21,12 @@ function main() {
     return;
   }
 
-  const entities = [
-    {
+  const entities = {
+    "1": {
       state: {},
-      render: movingSquare
+      tick: movingSquare
     }
-  ];
+  };
 
   // Draw the scene
   const render = () => {
