@@ -4,14 +4,15 @@ import { mat4 } from "gl-matrix";
 import { ProgramInfo } from "../shaders/init";
 import { Buffers } from "../models/init";
 
+export interface Entity {
+  programInfo: ProgramInfo;
+  buffers: Buffers;
+}
+
 //
 // Draw the scene.
 //
-export default function(
-  gl: WebGLRenderingContext,
-  programInfo: ProgramInfo,
-  buffers: Buffers
-) {
+export default function(gl: WebGLRenderingContext, entities: Entity[]) {
   gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
   gl.clearDepth(1.0); // Clear everything
   gl.enable(gl.DEPTH_TEST); // Enable depth testing
@@ -51,6 +52,17 @@ export default function(
     [-0.0, 0.0, -6.0]
   ); // amount to translate
 
+  for (const entity of entities) {
+    renderEntity(gl, projectionMatrix, modelViewMatrix, entity);
+  }
+}
+
+function renderEntity(
+  gl: WebGLRenderingContext,
+  projectionMatrix: mat4,
+  modelViewMatrix: mat4,
+  { programInfo, buffers }: Entity
+) {
   // Tell WebGL how to pull out the positions from the position
   // buffer into the vertexPosition attribute.
   {

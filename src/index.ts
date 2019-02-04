@@ -28,6 +28,17 @@ function main() {
   // objects we'll be drawing.
   const buffers = square(gl);
 
+  const entities = [
+    {
+      programInfo,
+      buffers
+    }
+  ];
+
   // Draw the scene
-  renderScene(gl, programInfo, buffers);
+  const render = () => {
+    renderScene(gl, entities);
+    requestAnimationFrame(render);
+  };
+  requestAnimationFrame(render);
 }
