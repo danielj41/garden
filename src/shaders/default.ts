@@ -1,5 +1,5 @@
 // https://raw.githubusercontent.com/mdn/webgl-examples/gh-pages/tutorial/sample2/webgl-demo.js
-
+import memoize from "memoize-one";
 import init, { ProgramInfo } from "./init";
 
 const vsSource = `
@@ -19,7 +19,7 @@ const fsSource = `
   }
 `;
 
-export default (gl: WebGLRenderingContext) => {
+export default memoize((gl: WebGLRenderingContext) => {
   // Initialize a shader program; this is where all the lighting
   // for the vertices and so forth is established.
   const shaderProgram = init(gl, vsSource, fsSource);
@@ -42,4 +42,4 @@ export default (gl: WebGLRenderingContext) => {
   };
 
   return programInfo;
-};
+});

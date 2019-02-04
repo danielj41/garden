@@ -1,8 +1,7 @@
 // https://raw.githubusercontent.com/mdn/webgl-examples/gh-pages/tutorial/sample2/webgl-demo.js
 
-import defaultShader from "./shaders/default";
-import square from "./models/square";
 import renderScene from "./render/render-scene";
+import movingSquare from "./entities/moving-square";
 
 main();
 
@@ -22,16 +21,10 @@ function main() {
     return;
   }
 
-  const programInfo = defaultShader(gl);
-
-  // Here's where we call the routine that builds all the
-  // objects we'll be drawing.
-  const buffers = square(gl);
-
   const entities = [
     {
-      programInfo,
-      buffers
+      state: {},
+      render: movingSquare
     }
   ];
 

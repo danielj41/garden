@@ -12,6 +12,8 @@
     "serve": "cd public && http-server"
   },
   "dependencies": {
-    "gl-matrix": "^3.0.0"
+    "@types/memoize-one": "^4.1.0",
+    "gl-matrix": "^3.0.0",
+    "memoize-one": "^5.0.0"
   }
 }

@@ -7,6 +7,11 @@
   resolved "https://registry.yarnpkg.com/@types/gl-matrix/-/gl-matrix-2.4.5.tgz#80630d88fb74ff8897a2a2855a8a700e6ee19d3e"
   integrity sha512-0L8Mq1+oaIW0oVzGUDbSW+HnTjCNb4CmoIQE5BkoHt/A7x20z0MJ1PnwfH3atty/vbWLGgvJwVu2Mz3SKFiEFw==
 
+"@types/memoize-one@^4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@types/memoize-one/-/memoize-one-4.1.0.tgz#62119f26055b3193ae43ca1882c5b29b88b71ece"
+  integrity sha512-cmSgi6JMX/yBwgpVm4GooNWIH+vEeJoa8FAa6ExOhpJbC0Juq32/uYKiKb3VPSqrEA0aOnjvwZanla3O1WZMbw==
+
 "@webassemblyjs/ast@1.7.11":
   version "1.7.11"
   resolved "https://registry.yarnpkg.com/@webassemblyjs/ast/-/ast-1.7.11.tgz#b988582cafbb2b095e8b556526f30c90d057cace"
@@ -1639,6 +1644,11 @@ mem@^4.0.0:
     map-age-cleaner "^0.1.1"
     mimic-fn "^1.0.0"
     p-is-promise "^2.0.0"
+
+memoize-one@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/memoize-one/-/memoize-one-5.0.0.tgz#d55007dffefb8de7546659a1722a5d42e128286e"
+  integrity sha512-7g0+ejkOaI9w5x6LvQwmj68kUj6rxROywPSCqmclG/HBacmFnZqhVscQ8kovkn9FBCNJmOz6SY42+jnvZzDWdw==
 
 memory-fs@^0.4.0, memory-fs@~0.4.1:
   version "0.4.1"

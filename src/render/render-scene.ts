@@ -5,8 +5,14 @@ import { ProgramInfo } from "../shaders/init";
 import { Buffers } from "../models/init";
 
 export interface Entity {
-  programInfo: ProgramInfo;
-  buffers: Buffers;
+  state: {};
+  render: (
+    env: any
+  ) => {
+    programInfo: ProgramInfo;
+    buffers: Buffers;
+    modelMatrix: mat4;
+  };
 }
 
 //
@@ -41,27 +47,40 @@ export default function(gl: WebGLRenderingContext, entities: Entity[]) {
 
   // Set the drawing position to the "identity" point, which is
   // the center of the scene.
-  const modelViewMatrix = mat4.create();
+  const viewMatrix = mat4.create();
 
   // Now move the drawing position a bit to where we want to
   // start drawing the square.
 
   mat4.translate(
-    modelViewMatrix, // destination matrix
-    modelViewMatrix, // matrix to translate
+    viewMatrix, // destination matrix
+    viewMatrix, // matrix to translate
     [-0.0, 0.0, -6.0]
   ); // amount to translate
 
   for (const entity of entities) {
-    renderEntity(gl, projectionMatrix, modelViewMatrix, entity);
+    renderEntity(
+      gl,
+      projectionMatrix,
+      viewMatrix,
+      entity.render({ gl, state: entity.state })
+    );
   }
 }
 
 function renderEntity(
   gl: WebGLRenderingContext,
   projectionMatrix: mat4,
-  modelViewMatrix: mat4,
-  { programInfo, buffers }: Entity
+  viewMatrix: mat4,
+  {
+    programInfo,
+    buffers,
+    modelMatrix
+  }: {
+    programInfo: ProgramInfo;
+    buffers: Buffers;
+    modelMatrix: mat4;
+  }
 ) {
   // Tell WebGL how to pull out the positions from the position
   // buffer into the vertexPosition attribute.
@@ -82,6 +101,9 @@ function renderEntity(
     );
     gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
   }
+
+  const modelViewMatrix = mat4.create();
+  mat4.multiply(modelViewMatrix, modelMatrix, viewMatrix);
 
   // Tell WebGL to use our program when drawing
 
