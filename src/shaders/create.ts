@@ -1,6 +1,8 @@
+import memoize from "memoize-one";
+
 // https://raw.githubusercontent.com/mdn/webgl-examples/gh-pages/tutorial/sample2/webgl-demo.js
 
-export interface ProgramInfo {
+export interface ShaderProgramInfo {
   program: WebGLProgram;
   attribLocations: {
     vertexPosition: number;
@@ -16,33 +18,37 @@ export interface ProgramInfo {
 //
 // Initialize a shader program, so WebGL knows how to draw our data
 //
-export default function initShaderProgram(
-  gl: WebGLRenderingContext,
+export default (
   vsSource: string,
-  fsSource: string
-) {
-  const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vsSource);
-  const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
+  fsSource: string,
+  getInfo: (
+    gl: WebGLRenderingContext,
+    shaderProgram: WebGLProgram
+  ) => ShaderProgramInfo
+) =>
+  memoize((gl: WebGLRenderingContext) => {
+    const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vsSource);
+    const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
 
-  // Create the shader program
+    // Create the shader program
 
-  const shaderProgram = gl.createProgram();
-  gl.attachShader(shaderProgram, vertexShader);
-  gl.attachShader(shaderProgram, fragmentShader);
-  gl.linkProgram(shaderProgram);
+    const shaderProgram = gl.createProgram();
+    gl.attachShader(shaderProgram, vertexShader);
+    gl.attachShader(shaderProgram, fragmentShader);
+    gl.linkProgram(shaderProgram);
 
-  // If creating the shader program failed, alert
+    // If creating the shader program failed, alert
 
-  if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-    alert(
-      "Unable to initialize the shader program: " +
-        gl.getProgramInfoLog(shaderProgram)
-    );
-    return null;
-  }
+    if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+      alert(
+        "Unable to initialize the shader program: " +
+          gl.getProgramInfoLog(shaderProgram)
+      );
+      return null;
+    }
 
-  return shaderProgram;
-}
+    return getInfo(gl, shaderProgram);
+  });
 
 //
 // creates a shader of the given type, uploads the source and

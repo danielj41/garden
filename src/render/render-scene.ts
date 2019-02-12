@@ -1,12 +1,10 @@
 // https://raw.githubusercontent.com/mdn/webgl-examples/gh-pages/tutorial/sample2/webgl-demo.js
 
 import { mat4 } from "gl-matrix";
-import { ProgramInfo } from "../shaders/init";
-import { Buffers } from "../models/init";
 
 import { render } from "../entities";
 
-import { Task, Env, RenderTask } from "./types";
+import { RenderTask } from "./types";
 
 //
 // Draw the scene.
@@ -53,12 +51,10 @@ export default function(gl: WebGLRenderingContext, store: any) {
 
   const state = store.getState();
 
-  const tasks = render({ gl }, state);
+  const tasks = render(state);
 
   for (const task of tasks) {
-    if (task.type === "render") {
-      renderEntity(gl, projectionMatrix, viewMatrix, task);
-    }
+    renderEntity(gl, projectionMatrix, viewMatrix, task);
   }
 }
 
@@ -66,8 +62,11 @@ function renderEntity(
   gl: WebGLRenderingContext,
   projectionMatrix: mat4,
   viewMatrix: mat4,
-  { programInfo, buffers, modelMatrix }: RenderTask
+  { shader, model, modelMatrix }: RenderTask
 ) {
+  const programInfo = shader(gl);
+  const buffers = model(gl);
+
   // Tell WebGL how to pull out the positions from the position
   // buffer into the vertexPosition attribute.
   {

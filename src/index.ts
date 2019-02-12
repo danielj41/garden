@@ -26,7 +26,7 @@ function main() {
   const store = createStore(reducer);
 
   document.addEventListener("click", () => {
-    store.dispatch({ type: "NODE_UPDATE_POSITION", id: "1", x: 0.1, y: 0.1 });
+    store.dispatch({ type: "NODE_UPDATE_POSITION", id: "1", x: 0.3, y: 0.1 });
   });
 
   // Draw the scene

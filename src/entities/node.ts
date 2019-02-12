@@ -1,12 +1,11 @@
 import { mat4 } from "gl-matrix";
 import defaultShader from "../shaders/default";
 import squareModel from "../models/square";
-import render from "../components/render";
 
 import { Entity } from "./types";
 
 export const Node: Entity = {
-  render: function*(env, state) {
+  render: function*(state) {
     for (const id in state.nodes) {
       const node = state.nodes[id];
 
@@ -14,7 +13,11 @@ export const Node: Entity = {
       const matrix2 = mat4.create();
       mat4.translate(matrix, matrix2, [node.x, node.y, 0]);
 
-      yield render(env, defaultShader(env.gl), squareModel(env.gl), matrix);
+      yield {
+        shader: defaultShader,
+        model: squareModel,
+        modelMatrix: matrix
+      };
     }
   }
 };

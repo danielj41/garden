@@ -1,16 +1,9 @@
-import { ProgramInfo } from "../shaders/init";
-import { Buffers } from "../models/init";
+import { ShaderProgramInfo } from "../shaders/create";
+import { ModelBuffers } from "../models/create";
 import { mat4 } from "gl-matrix";
 
 export interface RenderTask {
-  type: "render";
-  programInfo: ProgramInfo;
-  buffers: Buffers;
+  shader: (gl: WebGLRenderingContext) => ShaderProgramInfo;
+  model: (gl: WebGLRenderingContext) => ModelBuffers;
   modelMatrix: mat4;
 }
-
-export interface Env {
-  gl: WebGLRenderingContext;
-}
-
-export type Task = RenderTask;
