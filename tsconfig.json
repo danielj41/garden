@@ -2,7 +2,9 @@
   "compilerOptions": {
     "noImplicitAny": true,
     "sourceMap": true,
-    "target": "ES6"
+    "target": "ES6",
+    "moduleResolution": "node",
+    "lib": ["es2017", "dom"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]

@@ -4,15 +4,14 @@ import { mat4 } from "gl-matrix";
 import { ProgramInfo } from "../shaders/init";
 import { Buffers } from "../models/init";
 
-import { Entity, Task, Env, RenderTask } from "./types";
+import { render } from "../entities";
+
+import { Task, Env, RenderTask } from "./types";
 
 //
 // Draw the scene.
 //
-export default function(
-  gl: WebGLRenderingContext,
-  entities: { [id: string]: Entity }
-) {
+export default function(gl: WebGLRenderingContext, store: any) {
   gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
   gl.clearDepth(1.0); // Clear everything
   gl.enable(gl.DEPTH_TEST); // Enable depth testing
@@ -52,18 +51,13 @@ export default function(
     [-0.0, 0.0, -6.0]
   ); // amount to translate
 
-  for (const id in entities) {
-    const entity = entities[id];
+  const state = store.getState();
 
-    const tasks = entity.tick({ gl, state: entity.state, id });
+  const tasks = render({ gl }, state);
 
-    for (const task of tasks) {
-      if (task.type === "render") {
-        renderEntity(gl, projectionMatrix, viewMatrix, task);
-      }
-      if (task.type === "state-update") {
-        entities[task.id].state[task.key] = task.value;
-      }
+  for (const task of tasks) {
+    if (task.type === "render") {
+      renderEntity(gl, projectionMatrix, viewMatrix, task);
     }
   }
 }

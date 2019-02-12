@@ -1,7 +1,9 @@
 // https://raw.githubusercontent.com/mdn/webgl-examples/gh-pages/tutorial/sample2/webgl-demo.js
 
+import { createStore } from "redux";
+import { reducer } from "./reducers";
+
 import renderScene from "./render/render-scene";
-import movingSquare from "./entities/moving-square";
 
 main();
 
@@ -21,16 +23,15 @@ function main() {
     return;
   }
 
-  const entities = {
-    "1": {
-      state: {},
-      tick: movingSquare
-    }
-  };
+  const store = createStore(reducer);
+
+  document.addEventListener("click", () => {
+    store.dispatch({ type: "NODE_UPDATE_POSITION", id: "1", x: 0.1, y: 0.1 });
+  });
 
   // Draw the scene
   const render = () => {
-    renderScene(gl, entities);
+    renderScene(gl, store);
     requestAnimationFrame(render);
   };
   requestAnimationFrame(render);
