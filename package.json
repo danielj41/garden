@@ -1,6 +1,7 @@
 {
   "devDependencies": {
     "@types/gl-matrix": "^2.4.5",
+    "@types/memoize-one": "^4.1.0",
     "http-server": "^0.11.1",
     "ts-loader": "^5.3.3",
     "typescript": "^3.3.1",
@@ -12,8 +13,8 @@
     "serve": "cd public && http-server"
   },
   "dependencies": {
-    "@types/memoize-one": "^4.1.0",
     "gl-matrix": "^3.0.0",
-    "memoize-one": "^5.0.0"
+    "memoize-one": "^5.0.0",
+    "redux": "^4.0.1"
   }
 }
