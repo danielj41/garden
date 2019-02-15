@@ -2,7 +2,7 @@
 
 import { configureStore } from "redux-starter-kit";
 import { reducer } from "./state";
-import { nodes } from "./state/nodes";
+import nodesSlice from "./state/nodes";
 
 import renderScene from "./render/render-scene";
 
@@ -30,7 +30,7 @@ function main() {
 
   document.addEventListener("click", () => {
     store.dispatch(
-      nodes.actions.updatePosition({
+      nodesSlice.actions.updatePosition({
         x: 0.1,
         y: 0.01,
         id: "1"

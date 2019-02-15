@@ -6,7 +6,7 @@ interface Layers {
 
 type BlendMode = "add" | "subtract";
 
-interface Layer {
+export interface Layer {
   blendMode: BlendMode;
   orientation: number;
   order: number;
@@ -14,7 +14,7 @@ interface Layer {
 
 const initialState: Layers = {};
 
-export const layers = createSlice({
+export default createSlice({
   slice: "layers",
   initialState,
   reducers: {}

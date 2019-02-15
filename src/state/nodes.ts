@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from "redux-starter-kit";
 
-export interface Nodes {
+interface Nodes {
   [id: string]: Node;
 }
 
@@ -29,7 +29,7 @@ const initialState: Nodes = {
   }
 };
 
-export const nodes = createSlice({
+export default createSlice({
   slice: "nodes",
   initialState,
   reducers: {

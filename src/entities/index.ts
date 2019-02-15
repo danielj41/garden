@@ -1,6 +1,6 @@
 import { Render } from "./types";
-import { Node } from "./node";
+import renderNodes from "./nodes";
 
 export const render: Render = function*(state) {
-  yield* Node.render(state);
+  yield* renderNodes(state);
 };
