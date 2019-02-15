@@ -1,8 +1,8 @@
 // https://raw.githubusercontent.com/mdn/webgl-examples/gh-pages/tutorial/sample2/webgl-demo.js
 
 import { configureStore } from "redux-starter-kit";
-import { reducer } from "./reducers";
-import { nodes } from "./reducers/nodes";
+import { reducer } from "./state";
+import { nodes } from "./state/nodes";
 
 import renderScene from "./render/render-scene";
 
