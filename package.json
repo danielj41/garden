@@ -15,6 +15,7 @@
   "dependencies": {
     "gl-matrix": "^3.0.0",
     "memoize-one": "^5.0.0",
-    "redux": "^4.0.1"
+    "redux": "^4.0.1",
+    "redux-starter-kit": "^0.4.3"
   }
 }

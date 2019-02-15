@@ -1,5 +1,5 @@
-import { State } from "../reducers";
 import { RenderTask } from "../render/types";
+import { State } from "../reducers";
 
 export type Render = (state: State) => Iterable<RenderTask>;
 

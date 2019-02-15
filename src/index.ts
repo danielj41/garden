@@ -1,7 +1,8 @@
 // https://raw.githubusercontent.com/mdn/webgl-examples/gh-pages/tutorial/sample2/webgl-demo.js
 
-import { createStore } from "redux";
+import { configureStore } from "redux-starter-kit";
 import { reducer } from "./reducers";
+import { nodes } from "./reducers/nodes";
 
 import renderScene from "./render/render-scene";
 
@@ -23,10 +24,18 @@ function main() {
     return;
   }
 
-  const store = createStore(reducer);
+  const store = configureStore({
+    reducer: reducer
+  });
 
   document.addEventListener("click", () => {
-    store.dispatch({ type: "NODE_UPDATE_POSITION", id: "1", x: 0.3, y: 0.1 });
+    store.dispatch(
+      nodes.actions.updatePosition({
+        x: 0.1,
+        y: 0.01,
+        id: "1"
+      })
+    );
   });
 
   // Draw the scene
