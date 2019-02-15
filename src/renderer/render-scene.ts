@@ -54,6 +54,7 @@ export default function(gl: WebGLRenderingContext, store: any) {
   const tasks = render(state);
 
   for (const task of tasks) {
+    // TODO: Group tasks by (frameBuffer, shaderProgram). Render main canvas last.
     renderEntity(gl, projectionMatrix, viewMatrix, task);
   }
 }

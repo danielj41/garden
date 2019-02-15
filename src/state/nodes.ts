@@ -14,14 +14,14 @@ export interface Node {
 
 const initialState: Nodes = {
   "1": {
-    idLayer: "2",
+    idLayer: "l1",
     connectDown: true,
     connectRight: false,
     x: 0.5,
     y: 0.5
   },
   "2": {
-    idLayer: "2",
+    idLayer: "l2",
     connectDown: true,
     connectRight: false,
     x: 0.1,

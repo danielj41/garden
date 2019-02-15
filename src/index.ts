@@ -4,7 +4,7 @@ import { configureStore } from "redux-starter-kit";
 import { reducer } from "./state";
 import nodesSlice from "./state/nodes";
 
-import renderScene from "./render/render-scene";
+import renderScene from "./renderer/render-scene";
 
 main();
 

@@ -20,7 +20,8 @@ const renderNode = function*(node: Node) {
   yield {
     shader: defaultShader,
     model: squareModel,
-    modelMatrix: matrix
+    modelMatrix: matrix,
+    frameBuffer: node.idLayer
   };
 };
 
