@@ -6,5 +6,5 @@ export interface RenderTask {
   shader: (gl: WebGLRenderingContext) => ShaderProgramInfo;
   model: (gl: WebGLRenderingContext) => ModelBuffers;
   modelMatrix: mat4;
-  frameBuffer: string | null;
+  idFramebuffer: string | null;
 }

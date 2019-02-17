@@ -1,15 +1,28 @@
+import { Store } from "redux-starter-kit";
+
 import { mat4 } from "gl-matrix";
-
 import { render } from "../entities";
-
 import { RenderTask } from "./types";
-import { getCanvas } from "./framebuffer";
+import { getCanvas, FramebufferInfo } from "./framebuffer";
+import { State } from "../state";
+import { ShaderProgramInfo } from "../shaders/create";
+import { ModelBuffers } from "../models/create";
 
 //
 // Draw the scene.
 //
-export default function(gl: WebGLRenderingContext, store: any) {
-  const framebufferInfo = getCanvas(gl);
+export default function(gl: WebGLRenderingContext, store: Store<State>) {
+  const state = store.getState();
+  const tasks = render(state);
+
+  renderWithFramebuffer(gl, getCanvas(gl), tasks);
+}
+
+function renderWithFramebuffer(
+  gl: WebGLRenderingContext,
+  framebufferInfo: FramebufferInfo,
+  tasks: Iterable<RenderTask>
+) {
   framebufferInfo.use();
 
   // Create a perspective matrix, a special matrix that is
@@ -42,25 +55,41 @@ export default function(gl: WebGLRenderingContext, store: any) {
     [-0.0, 0.0, -6.0]
   ); // amount to translate
 
-  const state = store.getState();
-
-  const tasks = render(state);
-
   for (const task of tasks) {
     // TODO: Group tasks by (frameBuffer, shaderProgram). Render main canvas last.
-    renderEntity(gl, projectionMatrix, viewMatrix, task);
+    renderWithProgram(gl, projectionMatrix, viewMatrix, task.shader(gl), [
+      task
+    ]);
   }
 }
 
-function renderEntity(
+function renderWithProgram(
   gl: WebGLRenderingContext,
   projectionMatrix: mat4,
   viewMatrix: mat4,
-  { shader, model, modelMatrix }: RenderTask
+  programInfo: ShaderProgramInfo,
+  tasks: Iterable<RenderTask>
 ) {
-  const programInfo = shader(gl);
-  const buffers = model(gl);
+  gl.useProgram(programInfo.program);
 
+  gl.uniformMatrix4fv(
+    programInfo.uniformLocations.projectionMatrix,
+    false,
+    projectionMatrix
+  );
+
+  for (const task of tasks) {
+    renderWithModel(gl, viewMatrix, programInfo, task.model(gl), tasks);
+  }
+}
+
+function renderWithModel(
+  gl: WebGLRenderingContext,
+  viewMatrix: mat4,
+  programInfo: ShaderProgramInfo,
+  buffers: ModelBuffers,
+  tasks: Iterable<RenderTask>
+) {
   // Tell WebGL how to pull out the positions from the position
   // buffer into the vertexPosition attribute.
   {
@@ -81,20 +110,24 @@ function renderEntity(
     gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
   }
 
+  for (const task of tasks) {
+    renderEntity(gl, viewMatrix, programInfo, task);
+  }
+}
+
+function renderEntity(
+  gl: WebGLRenderingContext,
+  viewMatrix: mat4,
+  programInfo: ShaderProgramInfo,
+  { modelMatrix }: RenderTask
+) {
   const modelViewMatrix = mat4.create();
   mat4.multiply(modelViewMatrix, modelMatrix, viewMatrix);
 
   // Tell WebGL to use our program when drawing
 
-  gl.useProgram(programInfo.program);
-
   // Set the shader uniforms
 
-  gl.uniformMatrix4fv(
-    programInfo.uniformLocations.projectionMatrix,
-    false,
-    projectionMatrix
-  );
   gl.uniformMatrix4fv(
     programInfo.uniformLocations.modelViewMatrix,
     false,

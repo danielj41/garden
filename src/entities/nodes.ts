@@ -21,7 +21,7 @@ const renderNode = function*(node: Node) {
     shader: defaultShader,
     model: squareModel,
     modelMatrix: matrix,
-    frameBuffer: node.idLayer
+    idFramebuffer: node.idLayer
   };
 };
 

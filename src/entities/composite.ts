@@ -11,7 +11,7 @@ const renderCompositeLayer: Render = function*(state) {
     shader: defaultShader, // replace with shader that combines frameBuffers
     model: squareModel,
     modelMatrix: matrix,
-    frameBuffer: null // render to main canvas
+    idFramebuffer: null // render to main canvas
   };
 };
 
