@@ -9,7 +9,7 @@ const renderCompositeLayer: Render = function*(state) {
 
   yield {
     idFramebuffer: "canvas",
-    idShader: shaders.default.id,
+    idShader: shaders.combine.id,
     idModel: models.square.id,
     modelMatrix: matrix
   };

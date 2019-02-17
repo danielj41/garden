@@ -126,6 +126,7 @@ function renderWithModel(
     const normalize = false;
     const stride = 0;
     const offset = 0;
+
     gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
     gl.vertexAttribPointer(
       programInfo.attribLocations.vertexPosition,
@@ -136,6 +137,25 @@ function renderWithModel(
       offset
     );
     gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
+
+    // TODO: Make this more generic or call out to a program-specific setup.
+    if (programInfo.attribLocations.texCoord) {
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffers.texCoord);
+      gl.vertexAttribPointer(
+        programInfo.attribLocations.texCoord,
+        numComponents,
+        type,
+        normalize,
+        stride,
+        offset
+      );
+      gl.enableVertexAttribArray(programInfo.attribLocations.texCoord);
+    }
+    if (programInfo.uniformLocations.texture) {
+      const { targetTexture } = getFramebuffer(gl, "l1"); // TODO: Make generic.
+      gl.bindTexture(gl.TEXTURE_2D, targetTexture);
+      gl.uniform1i(programInfo.uniformLocations.texture, 0);
+    }
   }
 
   for (const task of tasks) {

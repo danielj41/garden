@@ -19,7 +19,7 @@ const renderNode = function*(node: Node): Iterable<RenderTask> {
   mat4.translate(matrix, matrix, [node.x, node.y, 0]);
 
   yield {
-    idFramebuffer: "canvas", //node.idLayer,
+    idFramebuffer: node.idLayer,
     idShader: shaders.default.id,
     idModel: models.square.id,
     modelMatrix: matrix

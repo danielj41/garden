@@ -2,6 +2,7 @@ import memoize from "fast-memoize";
 
 export interface FramebufferInfo {
   framebuffer: WebGLFramebuffer;
+  targetTexture?: WebGLTexture;
   getAspectRatio: () => number;
   use: () => void;
 }
@@ -60,6 +61,7 @@ export const getFramebuffer = memoize(
 
     return {
       framebuffer: fb,
+      targetTexture,
       getAspectRatio: () => targetTextureWidth / targetTextureHeight,
       use: () => {
         gl.bindFramebuffer(gl.FRAMEBUFFER, fb);

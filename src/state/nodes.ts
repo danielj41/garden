@@ -21,7 +21,7 @@ const initialState: Nodes = {
     y: 0.5
   },
   "2": {
-    idLayer: "l2",
+    idLayer: "l1",
     connectDown: true,
     connectRight: false,
     x: 0.1,

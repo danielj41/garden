@@ -1,5 +1,6 @@
 import memoize from "memoize-one";
 
+// TODO: Parameterize this type
 export interface ShaderProgramInfo {
   program: WebGLProgram;
   attribLocations: {
