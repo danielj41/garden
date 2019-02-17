@@ -1,5 +1,3 @@
-// https://raw.githubusercontent.com/mdn/webgl-examples/gh-pages/tutorial/sample2/webgl-demo.js
-
 import { mat4 } from "gl-matrix";
 
 import { render } from "../entities";

@@ -1,4 +1,3 @@
-// https://raw.githubusercontent.com/mdn/webgl-examples/gh-pages/tutorial/sample2/webgl-demo.js
 import create from "./create";
 
 const vsSource = `

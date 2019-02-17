@@ -1,7 +1,5 @@
 import memoize from "memoize-one";
 
-// https://raw.githubusercontent.com/mdn/webgl-examples/gh-pages/tutorial/sample2/webgl-demo.js
-
 export interface ShaderProgramInfo {
   program: WebGLProgram;
   attribLocations: {
