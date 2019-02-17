@@ -9,14 +9,8 @@ import { getCanvas } from "./framebuffer";
 // Draw the scene.
 //
 export default function(gl: WebGLRenderingContext, store: any) {
-  gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
-  gl.clearDepth(1.0); // Clear everything
-  gl.enable(gl.DEPTH_TEST); // Enable depth testing
-  gl.depthFunc(gl.LEQUAL); // Near things obscure far things
-
-  // Clear the canvas before we start drawing on it.
-
-  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+  const framebufferInfo = getCanvas(gl);
+  framebufferInfo.use();
 
   // Create a perspective matrix, a special matrix that is
   // used to simulate the distortion of perspective in a camera.
@@ -26,7 +20,7 @@ export default function(gl: WebGLRenderingContext, store: any) {
   // and 100 units away from the camera.
 
   const fieldOfView = (45 * Math.PI) / 180; // in radians
-  const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+  const aspect = framebufferInfo.getAspectRatio();
   const zNear = 0.1;
   const zFar = 100.0;
   const projectionMatrix = mat4.create();
