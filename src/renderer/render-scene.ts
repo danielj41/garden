@@ -3,6 +3,7 @@ import { mat4 } from "gl-matrix";
 import { render } from "../entities";
 
 import { RenderTask } from "./types";
+import { getCanvas } from "./framebuffer";
 
 //
 // Draw the scene.
