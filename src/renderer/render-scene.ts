@@ -20,7 +20,7 @@ export default function(gl: WebGLRenderingContext, store: Store<State>) {
 
   const groupedTasks = groupBy(tasks, task => task.idFramebuffer);
 
-  for (const idFramebuffer of Object.keys(groupedTasks)) {
+  for (const idFramebuffer in groupedTasks) {
     if (idFramebuffer === "canvas") {
       continue;
     }
@@ -38,7 +38,7 @@ export default function(gl: WebGLRenderingContext, store: Store<State>) {
 function renderWithFramebuffer(
   gl: WebGLRenderingContext,
   framebufferInfo: FramebufferInfo,
-  tasks: Iterable<RenderTask>
+  tasks: RenderTask[]
 ) {
   framebufferInfo.use();
 
@@ -72,14 +72,14 @@ function renderWithFramebuffer(
     [-0.0, 0.0, -6.0]
   ); // amount to translate
 
-  for (const task of tasks) {
-    // TODO: Group tasks by (frameBuffer, shaderProgram). Render main canvas last.
+  const groupedTasks = groupBy(tasks, task => task.idShader);
+  for (const idShader in groupedTasks) {
     renderWithProgram(
       gl,
       projectionMatrix,
       viewMatrix,
-      shaders[task.idShader].shader(gl),
-      tasks
+      shaders[groupedTasks[idShader][0].idShader].shader(gl), // TODO: Just use shaders[idShader] here, make typescript work
+      groupedTasks[idShader]
     );
   }
 }
@@ -89,7 +89,7 @@ function renderWithProgram(
   projectionMatrix: mat4,
   viewMatrix: mat4,
   programInfo: ShaderProgramInfo,
-  tasks: Iterable<RenderTask>
+  tasks: RenderTask[]
 ) {
   gl.useProgram(programInfo.program);
 
@@ -99,13 +99,14 @@ function renderWithProgram(
     projectionMatrix
   );
 
-  for (const task of tasks) {
+  const groupedTasks = groupBy(tasks, task => task.idModel);
+  for (const idModel in groupedTasks) {
     renderWithModel(
       gl,
       viewMatrix,
       programInfo,
-      models[task.idModel].model(gl),
-      tasks
+      models[groupedTasks[idModel][0].idModel].model(gl), // TODO: Just use models[idModel] here, make typescript work
+      groupedTasks[idModel]
     );
   }
 }
@@ -115,7 +116,7 @@ function renderWithModel(
   viewMatrix: mat4,
   programInfo: ShaderProgramInfo,
   buffers: ModelBuffers,
-  tasks: Iterable<RenderTask>
+  tasks: RenderTask[]
 ) {
   // Tell WebGL how to pull out the positions from the position
   // buffer into the vertexPosition attribute.
