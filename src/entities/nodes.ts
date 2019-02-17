@@ -1,6 +1,6 @@
 import { mat4 } from "gl-matrix";
-import defaultShader from "../shaders/default";
-import squareModel from "../models/square";
+import shaders from "../shaders";
+import models from "../models";
 import nodesSlice, { Node } from "../state/nodes";
 
 import { Render } from "./types";
@@ -19,10 +19,10 @@ const renderNode = function*(node: Node): Iterable<RenderTask> {
   mat4.translate(matrix, matrix, [node.x, node.y, 0]);
 
   yield {
-    shader: defaultShader,
-    model: squareModel,
-    modelMatrix: matrix,
-    idFramebuffer: null //node.idLayer,
+    idFramebuffer: "canvas", //node.idLayer,
+    idShader: shaders.default.id,
+    idModel: models.square.id,
+    modelMatrix: matrix
   };
 };
 

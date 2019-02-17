@@ -1,17 +1,17 @@
 import { mat4 } from "gl-matrix";
-import defaultShader from "../shaders/default";
-import squareModel from "../models/square";
 
+import shaders from "../shaders";
+import models from "../models";
 import { Render } from "./types";
 
 const renderCompositeLayer: Render = function*(state) {
   const matrix = mat4.create();
 
   yield {
-    shader: defaultShader, // replace with shader that combines frameBuffers
-    model: squareModel,
-    modelMatrix: matrix,
-    idFramebuffer: null // render to main canvas
+    idFramebuffer: "canvas",
+    idShader: shaders.default.id,
+    idModel: models.square.id,
+    modelMatrix: matrix
   };
 };
 

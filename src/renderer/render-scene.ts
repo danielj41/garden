@@ -1,4 +1,5 @@
 import { Store } from "redux-starter-kit";
+import { groupBy } from "lodash";
 
 import { mat4 } from "gl-matrix";
 import { render } from "../entities";
@@ -7,18 +8,17 @@ import { getCanvas, FramebufferInfo, getFramebuffer } from "./framebuffer";
 import { State } from "../state";
 import { ShaderProgramInfo } from "../shaders/create";
 import { ModelBuffers } from "../models/create";
-import { groupBy } from "lodash";
+import shaders from "../shaders";
+import models from "../models";
 
 //
 // Draw the scene.
 //
 export default function(gl: WebGLRenderingContext, store: Store<State>) {
   const state = store.getState();
-  const tasks = render(state);
+  const tasks = [...render(state)];
 
-  const groupedTasks = groupBy([...tasks], (task: RenderTask) => {
-    return task.idFramebuffer || "canvas";
-  });
+  const groupedTasks = groupBy(tasks, task => task.idFramebuffer);
 
   for (const idFramebuffer of Object.keys(groupedTasks)) {
     if (idFramebuffer === "canvas") {
@@ -74,7 +74,13 @@ function renderWithFramebuffer(
 
   for (const task of tasks) {
     // TODO: Group tasks by (frameBuffer, shaderProgram). Render main canvas last.
-    renderWithProgram(gl, projectionMatrix, viewMatrix, task.shader(gl), tasks);
+    renderWithProgram(
+      gl,
+      projectionMatrix,
+      viewMatrix,
+      shaders[task.idShader].shader(gl),
+      tasks
+    );
   }
 }
 
@@ -94,7 +100,13 @@ function renderWithProgram(
   );
 
   for (const task of tasks) {
-    renderWithModel(gl, viewMatrix, programInfo, task.model(gl), tasks);
+    renderWithModel(
+      gl,
+      viewMatrix,
+      programInfo,
+      models[task.idModel].model(gl),
+      tasks
+    );
   }
 }
 
