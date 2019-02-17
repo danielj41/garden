@@ -4,6 +4,7 @@ import squareModel from "../models/square";
 import nodesSlice, { Node } from "../state/nodes";
 
 import { Render } from "./types";
+import { RenderTask } from "../renderer/types";
 
 const renderNodes: Render = function*(state) {
   const nodes = nodesSlice.selectors.getNodes(state);
@@ -13,7 +14,7 @@ const renderNodes: Render = function*(state) {
   }
 };
 
-const renderNode = function*(node: Node) {
+const renderNode = function*(node: Node): Iterable<RenderTask> {
   const matrix = mat4.create();
   mat4.translate(matrix, matrix, [node.x, node.y, 0]);
 
@@ -21,7 +22,7 @@ const renderNode = function*(node: Node) {
     shader: defaultShader,
     model: squareModel,
     modelMatrix: matrix,
-    idFramebuffer: node.idLayer
+    idFramebuffer: null //node.idLayer,
   };
 };
 
