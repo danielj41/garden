@@ -161,10 +161,10 @@ function renderEntity(
   gl: WebGLRenderingContext,
   viewMatrix: mat4,
   programInfo: ShaderProgramInfo,
-  { modelMatrix, shaderSetupParams }: RenderTask
+  { modelMatrix, shaderSetupParam }: RenderTask
 ) {
   if (programInfo.setup) {
-    programInfo.setup(shaderSetupParams);
+    programInfo.setup(shaderSetupParam);
   }
 
   const modelViewMatrix = mat4.create();

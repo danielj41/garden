@@ -25,7 +25,7 @@ const fsSource = `
   varying vec2 vTexCoord;
 
   void main() {
-    gl_FragColor = texture2D(uTexture0, vTexCoord) + texture2D(uTexture0, vTexCoord);
+    gl_FragColor = texture2D(uTexture0, vTexCoord) + texture2D(uTexture1, vTexCoord);
   }
 `;
 
@@ -52,12 +52,23 @@ export default create(vsSource, fsSource, (gl, program) => {
     setup: (idFramebuffers: IdFramebuffers) => {
       let index = 0;
 
-      for (const idFramebuffer in idFramebuffers) {
-        const { targetTexture } = getFramebuffer(gl, idFramebuffer);
-        gl.activeTexture(textureMap[index]);
-        gl.bindTexture(gl.TEXTURE_2D, targetTexture);
-        gl.uniform1i(textureLocations[index], index);
-        index++;
+      // todo: allow arbitrary number of textures, fill all slots. right now
+      // works for 1 or 2.
+      while (index < 2) {
+        for (const idFramebuffer of idFramebuffers) {
+          const { targetTexture } = getFramebuffer(gl, idFramebuffer);
+          console.log(
+            index,
+            idFramebuffer,
+            textureMap[index],
+            targetTexture,
+            textureLocations
+          );
+          gl.activeTexture(textureMap[index]);
+          gl.bindTexture(gl.TEXTURE_2D, targetTexture);
+          gl.uniform1i(textureLocations[index], index);
+          index++;
+        }
       }
     }
   };

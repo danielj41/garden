@@ -5,7 +5,7 @@ import { mat4 } from "gl-matrix";
 export interface RenderTask {
   idFramebuffer: string | "canvas";
   idShader: IdShader;
-  shaderSetupParams?: any; // TODO: Parameterize ?
+  shaderSetupParam?: any; // TODO: Parameterize ?
   idModel: IdModel;
   modelMatrix: mat4;
 }
