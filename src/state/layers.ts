@@ -12,7 +12,18 @@ export interface Layer {
   order: number;
 }
 
-const initialState: Layers = {};
+const initialState: Layers = {
+  l1: {
+    blendMode: "add",
+    orientation: 0,
+    order: 0
+  },
+  l2: {
+    blendMode: "add",
+    orientation: 0,
+    order: 0
+  }
+};
 
 export default createSlice({
   slice: "layers",

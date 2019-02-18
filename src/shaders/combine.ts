@@ -1,4 +1,5 @@
 import create from "./create";
+import { getFramebuffer } from "../renderer/framebuffer";
 
 const vsSource = `
   attribute vec4 aVertexPosition;
@@ -19,15 +20,25 @@ const vsSource = `
 const fsSource = `
   precision mediump float;
 
-  uniform sampler2D uTexture;
+  uniform sampler2D uTexture0;
+  uniform sampler2D uTexture1;
   varying vec2 vTexCoord;
 
   void main() {
-    gl_FragColor = texture2D(uTexture, vTexCoord);
+    gl_FragColor = texture2D(uTexture1, vTexCoord);
   }
 `;
 
-export default create(vsSource, fsSource, (gl, program) => {
+export type IdFramebuffers = string[];
+
+export default create<IdFramebuffers>(vsSource, fsSource, (gl, program) => {
+  const textureLocations = [
+    gl.getUniformLocation(program, "uTexture0"),
+    gl.getUniformLocation(program, "uTexture1")
+  ];
+
+  const textureMap = [gl.TEXTURE0, gl.TEXTURE1];
+
   const programInfo = {
     program: program,
     attribLocations: {
@@ -36,8 +47,18 @@ export default create(vsSource, fsSource, (gl, program) => {
     },
     uniformLocations: {
       projectionMatrix: gl.getUniformLocation(program, "uProjectionMatrix"),
-      modelViewMatrix: gl.getUniformLocation(program, "uModelViewMatrix"),
-      texture: gl.getUniformLocation(program, "uTexture")
+      modelViewMatrix: gl.getUniformLocation(program, "uModelViewMatrix")
+    },
+    setup: (idFramebuffers: IdFramebuffers) => {
+      let index = 0;
+
+      for (const idFramebuffer in idFramebuffers) {
+        gl.activeTexture(textureMap[index]);
+        const { targetTexture } = getFramebuffer(gl, idFramebuffer);
+        gl.bindTexture(gl.TEXTURE_2D, targetTexture);
+        gl.uniform1i(textureLocations[index], index);
+        index++;
+      }
     }
   };
 

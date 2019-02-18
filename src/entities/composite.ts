@@ -9,6 +9,7 @@ const renderCompositeLayer: Render = function*(state) {
 
   yield {
     idFramebuffer: "canvas",
+    shaderSetupParam: ["l1"],
     idShader: shaders.combine.id,
     idModel: models.square.id,
     modelMatrix: matrix

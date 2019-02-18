@@ -1,23 +1,22 @@
 import memoize from "memoize-one";
 
-// TODO: Parameterize this type
 export interface ShaderProgramInfo {
   program: WebGLProgram;
   attribLocations: {
     vertexPosition: number;
-    [name: string]: number;
+    texCoord?: number;
   };
   uniformLocations: {
     projectionMatrix: WebGLUniformLocation;
     modelViewMatrix: WebGLUniformLocation;
-    [name: string]: WebGLUniformLocation;
   };
+  setup?: (t: any) => void; // TODO: Parameterize `t`
 }
 
 //
 // Initialize a shader program, so WebGL knows how to draw our data
 //
-export default (
+export default <T = void>(
   vsSource: string,
   fsSource: string,
   getInfo: (

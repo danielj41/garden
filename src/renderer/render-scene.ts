@@ -138,7 +138,6 @@ function renderWithModel(
     );
     gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
 
-    // TODO: Make this more generic or call out to a program-specific setup.
     if (programInfo.attribLocations.texCoord) {
       gl.bindBuffer(gl.ARRAY_BUFFER, buffers.texCoord);
       gl.vertexAttribPointer(
@@ -151,11 +150,6 @@ function renderWithModel(
       );
       gl.enableVertexAttribArray(programInfo.attribLocations.texCoord);
     }
-    if (programInfo.uniformLocations.texture) {
-      const { targetTexture } = getFramebuffer(gl, "l1"); // TODO: Make generic.
-      gl.bindTexture(gl.TEXTURE_2D, targetTexture);
-      gl.uniform1i(programInfo.uniformLocations.texture, 0);
-    }
   }
 
   for (const task of tasks) {
@@ -167,8 +161,12 @@ function renderEntity(
   gl: WebGLRenderingContext,
   viewMatrix: mat4,
   programInfo: ShaderProgramInfo,
-  { modelMatrix }: RenderTask
+  { modelMatrix, shaderSetupParams }: RenderTask
 ) {
+  if (programInfo.setup) {
+    programInfo.setup(shaderSetupParams);
+  }
+
   const modelViewMatrix = mat4.create();
   mat4.multiply(modelViewMatrix, modelMatrix, viewMatrix);
 
