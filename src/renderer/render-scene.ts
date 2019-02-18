@@ -187,4 +187,8 @@ function renderEntity(
     const vertexCount = 4;
     gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
   }
+
+  if (programInfo.teardown) {
+    programInfo.teardown();
+  }
 }

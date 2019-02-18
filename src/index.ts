@@ -1,5 +1,3 @@
-// https://raw.githubusercontent.com/mdn/webgl-examples/gh-pages/tutorial/sample2/webgl-demo.js
-
 import { configureStore } from "redux-starter-kit";
 import { reducer } from "./state";
 import nodesSlice from "./state/nodes";
@@ -14,6 +12,17 @@ main();
 function main() {
   const canvas: HTMLCanvasElement = document.querySelector("#gl-canvas");
   const gl = canvas.getContext("webgl");
+
+  function resizeCanvas() {
+    if (
+      canvas.width != canvas.clientWidth ||
+      canvas.height != canvas.clientHeight
+    ) {
+      canvas.width = canvas.clientWidth;
+      canvas.height = canvas.clientHeight;
+      console.log("resized canvas: " + canvas.width + ", " + canvas.height);
+    }
+  }
 
   // If we don't have a GL context, give up now
 
@@ -40,6 +49,7 @@ function main() {
 
   // Draw the scene
   const render = () => {
+    resizeCanvas();
     renderScene(gl, store);
     requestAnimationFrame(render);
   };

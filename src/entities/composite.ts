@@ -6,8 +6,7 @@ import { Render } from "./types";
 
 const renderCompositeLayer: Render = function*(state) {
   const matrix = mat4.create();
-  mat4.translate(matrix, matrix, [0, 1.2, 0]);
-
+  mat4.translate(matrix, matrix, [0, 0, 0]);
   // all layers
   yield {
     idFramebuffer: "canvas",
@@ -18,11 +17,7 @@ const renderCompositeLayer: Render = function*(state) {
   };
 
   // single layer
-  let index = 0;
   for (const idLayer in state.layers) {
-    const matrix = mat4.create();
-    mat4.translate(matrix, matrix, [index * 2 - 2, -1.2, 0]);
-
     yield {
       idFramebuffer: "canvas",
       shaderSetupParam: [idLayer],
@@ -30,7 +25,6 @@ const renderCompositeLayer: Render = function*(state) {
       idModel: models.square.id,
       modelMatrix: matrix
     };
-    index++;
   }
 };
 

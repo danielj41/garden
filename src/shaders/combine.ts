@@ -11,7 +11,7 @@ const vsSource = `
   varying vec2 vTexCoord;
 
   void main() {
-    gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
+    gl_Position = aVertexPosition;
 
     vTexCoord = aTexCoord;
   }
@@ -50,9 +50,22 @@ export default create(vsSource, fsSource, (gl, program) => {
       modelViewMatrix: gl.getUniformLocation(program, "uModelViewMatrix")
     },
     setup: (idFramebuffers: IdFramebuffers) => {
+      const { left, top, width, height } = document
+        .getElementById(
+          idFramebuffers.length === 1 ? idFramebuffers[0] : "composite"
+        )
+        .getBoundingClientRect();
+      // TODO: pass in element id as parameter
+
+      // TODO: Probably more a concern of `framebuffer.ts`--allow selecting
+      // a portion of canvas as a "virtual" framebuffer?
+      gl.enable(gl.SCISSOR_TEST);
+      gl.viewport(left, gl.canvas.height - top - height, width, height);
+      gl.scissor(left, gl.canvas.height - top - height, width, height);
+
       let index = 0;
 
-      // todo: allow arbitrary number of textures, fill all slots. right now
+      // TODO: allow arbitrary number of textures, fill all slots. right now
       // works for 1 or 2.
       while (index < 2) {
         for (const idFramebuffer of idFramebuffers) {
@@ -63,6 +76,9 @@ export default create(vsSource, fsSource, (gl, program) => {
           index++;
         }
       }
+    },
+    teardown: () => {
+      gl.disable(gl.SCISSOR_TEST);
     }
   };
 

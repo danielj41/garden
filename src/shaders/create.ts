@@ -11,6 +11,7 @@ export interface ShaderProgramInfo {
     modelViewMatrix: WebGLUniformLocation;
   };
   setup?: (t: any) => void; // TODO: Parameterize `t`
+  teardown?: () => void;
 }
 
 //
