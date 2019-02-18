@@ -6,34 +6,32 @@ import { Render } from "./types";
 
 const renderCompositeLayer: Render = function*(state) {
   const matrix = mat4.create();
-  const matrix2 = mat4.create();
-  const matrix3 = mat4.create();
-  mat4.translate(matrix2, matrix2, [-2.5, 0, 0]);
-  mat4.translate(matrix3, matrix3, [2.5, 0, 0]);
+  mat4.translate(matrix, matrix, [0, 1.2, 0]);
 
+  // all layers
   yield {
     idFramebuffer: "canvas",
-    shaderSetupParam: ["l1", "l2"],
+    shaderSetupParam: Object.keys(state.layers),
     idShader: shaders.combine.id,
     idModel: models.square.id,
     modelMatrix: matrix
   };
 
-  yield {
-    idFramebuffer: "canvas",
-    shaderSetupParam: ["l1"],
-    idShader: shaders.combine.id,
-    idModel: models.square.id,
-    modelMatrix: matrix2
-  };
+  // single layer
+  let index = 0;
+  for (const idLayer in state.layers) {
+    const matrix = mat4.create();
+    mat4.translate(matrix, matrix, [index * 2 - 2, -1.2, 0]);
 
-  yield {
-    idFramebuffer: "canvas",
-    shaderSetupParam: ["l2"],
-    idShader: shaders.combine.id,
-    idModel: models.square.id,
-    modelMatrix: matrix3
-  };
+    yield {
+      idFramebuffer: "canvas",
+      shaderSetupParam: [idLayer],
+      idShader: shaders.combine.id,
+      idModel: models.square.id,
+      modelMatrix: matrix
+    };
+    index++;
+  }
 };
 
 export default renderCompositeLayer;

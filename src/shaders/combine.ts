@@ -57,13 +57,6 @@ export default create(vsSource, fsSource, (gl, program) => {
       while (index < 2) {
         for (const idFramebuffer of idFramebuffers) {
           const { targetTexture } = getFramebuffer(gl, idFramebuffer);
-          console.log(
-            index,
-            idFramebuffer,
-            textureMap[index],
-            targetTexture,
-            textureLocations
-          );
           gl.activeTexture(textureMap[index]);
           gl.bindTexture(gl.TEXTURE_2D, targetTexture);
           gl.uniform1i(textureLocations[index], index);
