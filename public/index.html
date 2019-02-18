@@ -20,24 +20,37 @@
       .content {
         position: relative;
         z-index: 1;
-        color: white;
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      .layer-wrapper {
+        position: relative;
+        margin: 32px;
       }
 
       .layer {
-        width: 128px;
-        height: 128px;
-        border: 2px solid red;
+        width: 256px;
+        height: 256px;
+        box-shadow: 1px 1px 2px 2px rgba(0, 0, 0, 0.15);
+        position: relative;
       }
     </style>
   </head>
   <body>
     <div class="content">
-      <p>first layer here</p>
-      <div class="layer" id="l1"></div>
-      <p>second layer here</p>
-      <div class="layer" id="l2"></div>
-      <p>combined layer here</p>
-      <div class="layer" id="composite"></div>
+      <div class="layer-wrapper">
+        <p>first layer here</p>
+        <div class="layer" id="l1"></div>
+      </div>
+      <div class="layer-wrapper">
+        <p>second layer here</p>
+        <div class="layer" id="l2"></div>
+      </div>
+      <div class="layer-wrapper">
+        <p>combined layer here</p>
+        <div class="layer" id="composite"></div>
+      </div>
     </div>
     <canvas id="gl-canvas"></canvas>
     <script src="./dist/bundle.js"></script>
