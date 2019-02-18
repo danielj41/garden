@@ -7,15 +7,22 @@ export interface FramebufferInfo {
   use: () => void;
 }
 
+let index = 0;
+
 // TODO: probably just import a singleton `gl` rather than memoizing everything
 export const getFramebuffer = memoize(
   (gl: WebGLRenderingContext, id: string): FramebufferInfo => {
     // lazily create a new framebuffer `id` if it doesn't already exist
 
+    // Create and bind the framebuffer
+    const fb = gl.createFramebuffer();
+    gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
+
     // create to render to
     const targetTextureWidth = 256;
     const targetTextureHeight = 256;
     const targetTexture = gl.createTexture();
+
     gl.bindTexture(gl.TEXTURE_2D, targetTexture);
 
     {
@@ -44,10 +51,6 @@ export const getFramebuffer = memoize(
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     }
 
-    // Create and bind the framebuffer
-    const fb = gl.createFramebuffer();
-    gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
-
     // attach the texture as the first color attachment
     const level = 0;
     const attachmentPoint = gl.COLOR_ATTACHMENT0;
@@ -65,12 +68,13 @@ export const getFramebuffer = memoize(
       getAspectRatio: () => targetTextureWidth / targetTextureHeight,
       use: () => {
         gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
+        gl.bindTexture(gl.TEXTURE_2D, targetTexture);
 
         // Tell WebGL how to convert from clip space to pixels
         gl.viewport(0, 0, targetTextureWidth, targetTextureHeight);
 
         // Clear the canvas AND the depth buffer.
-        gl.clearColor(0, 0, 1, 1); // clear to blue
+        gl.clearColor(0, id === "l2" ? 0.5 : 0, id === "l1" ? 0.5 : 0, 1); // clear to blue
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
       }
     };

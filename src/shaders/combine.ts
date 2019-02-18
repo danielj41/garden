@@ -25,13 +25,13 @@ const fsSource = `
   varying vec2 vTexCoord;
 
   void main() {
-    gl_FragColor = texture2D(uTexture1, vTexCoord);
+    gl_FragColor = texture2D(uTexture0, vTexCoord) + texture2D(uTexture0, vTexCoord);
   }
 `;
 
 export type IdFramebuffers = string[];
 
-export default create<IdFramebuffers>(vsSource, fsSource, (gl, program) => {
+export default create(vsSource, fsSource, (gl, program) => {
   const textureLocations = [
     gl.getUniformLocation(program, "uTexture0"),
     gl.getUniformLocation(program, "uTexture1")
@@ -53,8 +53,8 @@ export default create<IdFramebuffers>(vsSource, fsSource, (gl, program) => {
       let index = 0;
 
       for (const idFramebuffer in idFramebuffers) {
-        gl.activeTexture(textureMap[index]);
         const { targetTexture } = getFramebuffer(gl, idFramebuffer);
+        gl.activeTexture(textureMap[index]);
         gl.bindTexture(gl.TEXTURE_2D, targetTexture);
         gl.uniform1i(textureLocations[index], index);
         index++;

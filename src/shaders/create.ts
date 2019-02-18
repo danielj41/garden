@@ -16,7 +16,7 @@ export interface ShaderProgramInfo {
 //
 // Initialize a shader program, so WebGL knows how to draw our data
 //
-export default <T = void>(
+export default (
   vsSource: string,
   fsSource: string,
   getInfo: (
