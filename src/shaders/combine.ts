@@ -1,5 +1,5 @@
 import create from "./create";
-import { getTexture } from "../renderer/framebuffer";
+import { getTexture } from "../framebuffers/texture";
 
 const vsSource = `
   attribute vec4 aVertexPosition;

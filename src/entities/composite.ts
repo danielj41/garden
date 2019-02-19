@@ -9,9 +9,9 @@ const renderCompositeLayer: Render = function*(state) {
   mat4.translate(matrix, matrix, [0, 0, 0]);
   // all layers
   yield {
-    idFramebuffer: {
+    framebuffer: {
       type: "domNode",
-      idDomNode: "composite"
+      id: "composite"
     },
     shaderSetupParam: Object.keys(state.layers),
     idShader: shaders.combine.id,
@@ -22,9 +22,9 @@ const renderCompositeLayer: Render = function*(state) {
   // single layer
   for (const idLayer in state.layers) {
     yield {
-      idFramebuffer: {
+      framebuffer: {
         type: "domNode",
-        idDomNode: idLayer
+        id: idLayer
       },
       shaderSetupParam: [idLayer],
       idShader: shaders.combine.id,

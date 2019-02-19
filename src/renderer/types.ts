@@ -1,19 +1,13 @@
 import { IdShader } from "../shaders";
 import { IdModel } from "../models";
+import { FramebufferType } from "../framebuffers";
 import { mat4 } from "gl-matrix";
 
-type IdFramebuffer =
-  | {
-      type: "texture";
-      idTexture: string;
-    }
-  | {
-      type: "domNode";
-      idDomNode: string;
-    }; // | { type: "canvas" }
-
 export interface RenderTask {
-  idFramebuffer: IdFramebuffer;
+  framebuffer: {
+    type: FramebufferType;
+    id: string;
+  };
   idShader: IdShader;
   shaderSetupParam?: any; // TODO: Parameterize/couple to `idShader`
   idModel: IdModel;
