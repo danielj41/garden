@@ -1,15 +1,14 @@
 import { Store } from "redux-starter-kit";
 import { groupBy } from "lodash";
-
 import { mat4 } from "gl-matrix";
+
 import { render } from "../entities";
-import { RenderTask } from "./types";
 import framebuffers, { FramebufferInfo } from "../framebuffers";
 import { State } from "../state";
-import { ShaderProgramInfo } from "../shaders/create";
-import { ModelBuffers } from "../models/create";
-import shaders from "../shaders";
-import models from "../models";
+import shaders, { ShaderProgramInfo } from "../shaders";
+import models, { ModelBuffers } from "../models";
+
+import { RenderTask } from "./types";
 
 //
 // Draw the scene.

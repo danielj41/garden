@@ -26,3 +26,5 @@ export type ShaderLookup =
       id: "combine";
       param: string[];
     };
+
+// TODO: Export "lookupShader(gl, shaderLookup)" that binds `setup` to its param

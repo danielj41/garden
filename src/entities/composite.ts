@@ -17,7 +17,7 @@ const renderCompositeLayer: Render = function*(state) {
       param: Object.keys(state.layers)
     },
     model: {
-      id: "square"
+      id: "square" // TODO: Use rounded rectangle
     },
     modelMatrix: matrix
   };

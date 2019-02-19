@@ -1,5 +1,6 @@
 import memoize from "memoize-one";
 
+// TODO: Standardize naming (is it shader or program?)
 export interface ShaderProgramInfo {
   program: WebGLProgram;
   attribLocations: {
