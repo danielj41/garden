@@ -84,14 +84,16 @@ function renderWithFramebuffer(
     [-0.0, 0.0, -6.0]
   ); // amount to translate
 
-  const groupedTasks = groupBy(tasks, task => task.idShader);
-  for (const idShader in groupedTasks) {
+  const groupedTasks = groupBy(tasks, task => task.shader.id);
+  for (const tasks of Object.values(groupedTasks)) {
+    const { shader } = tasks[0];
+
     renderWithProgram(
       gl,
       projectionMatrix,
       viewMatrix,
-      shaders[groupedTasks[idShader][0].idShader].shader(gl), // TODO: Just use shaders[idShader] here, make typescript work
-      groupedTasks[idShader]
+      shaders[shader.id].shader(gl),
+      tasks
     );
   }
 }
@@ -111,14 +113,16 @@ function renderWithProgram(
     projectionMatrix
   );
 
-  const groupedTasks = groupBy(tasks, task => task.idModel);
-  for (const idModel in groupedTasks) {
+  const groupedTasks = groupBy(tasks, task => task.model.id);
+  for (const tasks of Object.values(groupedTasks)) {
+    const { model } = tasks[0];
+
     renderWithModel(
       gl,
       viewMatrix,
       programInfo,
-      models[groupedTasks[idModel][0].idModel].model(gl), // TODO: Just use models[idModel] here, make typescript work
-      groupedTasks[idModel]
+      models[model.id].get(gl),
+      tasks
     );
   }
 }
@@ -177,8 +181,8 @@ function renderEntity(
 ) {
   const { modelMatrix } = renderTask;
 
-  if (programInfo.setup && renderTask.shaderSetupParam) {
-    programInfo.setup(renderTask.shaderSetupParam);
+  if (programInfo.setup) {
+    programInfo.setup(renderTask.shader.param);
   }
 
   const modelViewMatrix = mat4.create();

@@ -1,10 +1,9 @@
 import { mat4 } from "gl-matrix";
-import shaders from "../shaders";
-import models from "../models";
+
 import nodesSlice, { Node } from "../state/nodes";
+import { RenderTask } from "../renderer/types";
 
 import { Render } from "./types";
-import { RenderTask } from "../renderer/types";
 
 const renderNodes: Render = function*(state) {
   const nodes = nodesSlice.selectors.getNodes(state);
@@ -23,8 +22,13 @@ const renderNode = function*(node: Node): Iterable<RenderTask> {
       type: "texture",
       id: node.idLayer
     },
-    idShader: shaders.default.id,
-    idModel: models.square.id,
+    shader: {
+      id: "default",
+      param: null
+    },
+    model: {
+      id: "square"
+    },
     modelMatrix: matrix
   };
 };

@@ -1,21 +1,24 @@
 import { mat4 } from "gl-matrix";
 
-import shaders from "../shaders";
-import models from "../models";
 import { Render } from "./types";
 
 const renderCompositeLayer: Render = function*(state) {
   const matrix = mat4.create();
   mat4.translate(matrix, matrix, [0, 0, 0]);
-  // all layers
+
+  // all layers combined
   yield {
     framebuffer: {
       type: "domNode",
       id: "composite"
     },
-    shaderSetupParam: Object.keys(state.layers),
-    idShader: shaders.combine.id,
-    idModel: models.square.id,
+    shader: {
+      id: "combine",
+      param: Object.keys(state.layers)
+    },
+    model: {
+      id: "square"
+    },
     modelMatrix: matrix
   };
 
@@ -26,9 +29,13 @@ const renderCompositeLayer: Render = function*(state) {
         type: "domNode",
         id: idLayer
       },
-      shaderSetupParam: [idLayer],
-      idShader: shaders.combine.id,
-      idModel: models.square.id,
+      shader: {
+        id: "combine",
+        param: [idLayer]
+      },
+      model: {
+        id: "square"
+      },
       modelMatrix: matrix
     };
   }

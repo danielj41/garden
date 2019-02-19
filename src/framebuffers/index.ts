@@ -15,4 +15,10 @@ const framebuffers = {
 };
 
 export default framebuffers;
+
 export type FramebufferType = keyof typeof framebuffers;
+
+export type FramebufferLookup = {
+  type: FramebufferType;
+  id: string;
+};
