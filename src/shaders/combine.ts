@@ -1,5 +1,5 @@
 import create from "./create";
-import { getFramebuffer } from "../renderer/framebuffer";
+import { getTexture } from "../renderer/framebuffer";
 
 const vsSource = `
   attribute vec4 aVertexPosition;
@@ -50,26 +50,14 @@ export default create(vsSource, fsSource, (gl, program) => {
       modelViewMatrix: gl.getUniformLocation(program, "uModelViewMatrix")
     },
     setup: (idFramebuffers: IdFramebuffers) => {
-      const { left, top, width, height } = document
-        .getElementById(
-          idFramebuffers.length === 1 ? idFramebuffers[0] : "composite"
-        )
-        .getBoundingClientRect();
-      // TODO: pass in element id as parameter
-
-      // TODO: Probably more a concern of `framebuffer.ts`--allow selecting
-      // a portion of canvas as a "virtual" framebuffer?
-      gl.enable(gl.SCISSOR_TEST);
-      gl.viewport(left, gl.canvas.height - top - height, width, height);
-      gl.scissor(left, gl.canvas.height - top - height, width, height);
-
+      // TODO: Type safety for `setup` params
       let index = 0;
 
       // TODO: allow arbitrary number of textures, fill all slots. right now
       // works for 1 or 2.
       while (index < 2) {
         for (const idFramebuffer of idFramebuffers) {
-          const { targetTexture } = getFramebuffer(gl, idFramebuffer);
+          const { targetTexture } = getTexture(gl, idFramebuffer);
           gl.activeTexture(textureMap[index]);
           gl.bindTexture(gl.TEXTURE_2D, targetTexture);
           gl.uniform1i(textureLocations[index], index);
@@ -77,9 +65,7 @@ export default create(vsSource, fsSource, (gl, program) => {
         }
       }
     },
-    teardown: () => {
-      gl.disable(gl.SCISSOR_TEST);
-    }
+    teardown: () => {}
   };
 
   return programInfo;

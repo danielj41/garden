@@ -7,10 +7,8 @@ export interface FramebufferInfo {
   use: () => void;
 }
 
-let index = 0;
-
 // TODO: probably just import a singleton `gl` rather than memoizing everything
-export const getFramebuffer = memoize(
+export const getTexture = memoize(
   (gl: WebGLRenderingContext, id: string): FramebufferInfo => {
     // lazily create a new framebuffer `id` if it doesn't already exist
 
@@ -72,6 +70,7 @@ export const getFramebuffer = memoize(
 
         // Tell WebGL how to convert from clip space to pixels
         gl.viewport(0, 0, targetTextureWidth, targetTextureHeight);
+        gl.disable(gl.SCISSOR_TEST);
 
         // Clear the canvas AND the depth buffer.
         gl.clearColor(0, id === "l2" ? 0.5 : 0, id === "l1" ? 0.5 : 0, 1); // clear to blue
@@ -81,17 +80,25 @@ export const getFramebuffer = memoize(
   }
 );
 
-export const getCanvas = memoize(
-  (gl: WebGLRenderingContext): FramebufferInfo => {
+export const getCanvasOverDOMNode = memoize(
+  (gl: WebGLRenderingContext, elemId: string): FramebufferInfo => {
     return {
       framebuffer: null,
-      getAspectRatio: () => gl.canvas.clientWidth / gl.canvas.clientHeight,
+      getAspectRatio: () => {
+        const el = document.getElementById(elemId);
+        const { width, height } = el.getBoundingClientRect();
+        return width / height;
+      },
       use: () => {
         // render to the canvas
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 
         // Tell WebGL how to convert from clip space to pixels
-        gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+        const el = document.getElementById(elemId);
+        const { left, top, width, height } = el.getBoundingClientRect();
+        gl.enable(gl.SCISSOR_TEST);
+        gl.viewport(left, gl.canvas.height - top - height, width, height);
+        gl.scissor(left, gl.canvas.height - top - height, width, height);
 
         gl.clearColor(1.0, 1.0, 1.0, 0.0); // Clear to transparent
         gl.clearDepth(1.0); // Clear everything

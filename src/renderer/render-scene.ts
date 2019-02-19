@@ -4,7 +4,11 @@ import { groupBy } from "lodash";
 import { mat4 } from "gl-matrix";
 import { render } from "../entities";
 import { RenderTask } from "./types";
-import { getCanvas, FramebufferInfo, getFramebuffer } from "./framebuffer";
+import {
+  FramebufferInfo,
+  getTexture,
+  getCanvasOverDOMNode
+} from "./framebuffer";
 import { State } from "../state";
 import { ShaderProgramInfo } from "../shaders/create";
 import { ModelBuffers } from "../models/create";
@@ -18,21 +22,31 @@ export default function(gl: WebGLRenderingContext, store: Store<State>) {
   const state = store.getState();
   const tasks = [...render(state)];
 
-  const groupedTasks = groupBy(tasks, task => task.idFramebuffer);
+  const groupedTasks = groupBy(tasks, task =>
+    JSON.stringify(task.idFramebuffer)
+  );
 
-  for (const idFramebuffer in groupedTasks) {
-    if (idFramebuffer === "canvas") {
-      continue;
+  // First pass: texture renders
+  for (const tasks of Object.values(groupedTasks)) {
+    const { idFramebuffer } = tasks[0];
+
+    if (idFramebuffer.type === "texture") {
+      renderWithFramebuffer(gl, getTexture(gl, idFramebuffer.idTexture), tasks);
     }
-
-    renderWithFramebuffer(
-      gl,
-      getFramebuffer(gl, idFramebuffer),
-      groupedTasks[idFramebuffer]
-    );
   }
 
-  renderWithFramebuffer(gl, getCanvas(gl), groupedTasks["canvas"]);
+  // Second pass: canvas renders
+  for (const tasks of Object.values(groupedTasks)) {
+    const { idFramebuffer } = tasks[0];
+
+    if (idFramebuffer.type === "domNode") {
+      renderWithFramebuffer(
+        gl,
+        getCanvasOverDOMNode(gl, idFramebuffer.idDomNode),
+        tasks
+      );
+    }
+  }
 }
 
 function renderWithFramebuffer(

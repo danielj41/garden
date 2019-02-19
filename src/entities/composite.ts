@@ -9,7 +9,10 @@ const renderCompositeLayer: Render = function*(state) {
   mat4.translate(matrix, matrix, [0, 0, 0]);
   // all layers
   yield {
-    idFramebuffer: "canvas",
+    idFramebuffer: {
+      type: "domNode",
+      idDomNode: "composite"
+    },
     shaderSetupParam: Object.keys(state.layers),
     idShader: shaders.combine.id,
     idModel: models.square.id,
@@ -19,7 +22,10 @@ const renderCompositeLayer: Render = function*(state) {
   // single layer
   for (const idLayer in state.layers) {
     yield {
-      idFramebuffer: "canvas",
+      idFramebuffer: {
+        type: "domNode",
+        idDomNode: idLayer
+      },
       shaderSetupParam: [idLayer],
       idShader: shaders.combine.id,
       idModel: models.square.id,
