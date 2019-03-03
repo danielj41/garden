@@ -68,7 +68,7 @@ export const getTexture = memoize(
         gl.disable(gl.SCISSOR_TEST);
 
         // Clear the canvas AND the depth buffer.
-        gl.clearColor(0, id === "l2" ? 0.5 : 0, id === "l1" ? 0.5 : 0, 1); // clear to blue
+        gl.clearColor(0, 0, 0, 0); // clear to transparent
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
       }
     };

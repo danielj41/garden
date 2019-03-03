@@ -26,6 +26,13 @@ const initialState: Nodes = {
     connectRight: false,
     x: 0.1,
     y: 0.1
+  },
+  "3": {
+    idLayer: "l3",
+    connectDown: true,
+    connectRight: false,
+    x: -0.4,
+    y: -0.4
   }
 };
 

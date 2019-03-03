@@ -8,20 +8,17 @@ type BlendMode = "add" | "subtract";
 
 export interface Layer {
   blendMode: BlendMode;
-  orientation: number;
-  order: number;
 }
 
 const initialState: Layers = {
   l1: {
-    blendMode: "add",
-    orientation: 0,
-    order: 0
+    blendMode: "subtract"
   },
   l2: {
-    blendMode: "add",
-    orientation: 0,
-    order: 0
+    blendMode: "add"
+  },
+  l3: {
+    blendMode: "add"
   }
 };
 

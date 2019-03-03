@@ -14,9 +14,9 @@ const renderCompositeLayer: Render = function*(state) {
     },
     shader: {
       id: "combine",
-      param: Object.keys(state.layers).map(idLayer => ({
+      param: Object.entries(state.layers).map(([idLayer, { blendMode }]) => ({
         idFramebuffer: idLayer,
-        mode: 1
+        mode: blendMode === "add" ? 1 : -5 // TODO: change to -1
       }))
     },
     model: {
