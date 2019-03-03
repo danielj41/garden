@@ -24,7 +24,7 @@ export type ShaderLookup =
     }
   | {
       id: "combine";
-      param: string[];
+      param: { idFramebuffer: string; mode: number }[];
     };
 
 // TODO: Export "lookupShader(gl, shaderLookup)" that binds `setup` to its param

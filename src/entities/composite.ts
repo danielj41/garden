@@ -14,7 +14,10 @@ const renderCompositeLayer: Render = function*(state) {
     },
     shader: {
       id: "combine",
-      param: Object.keys(state.layers)
+      param: Object.keys(state.layers).map(idLayer => ({
+        idFramebuffer: idLayer,
+        mode: 1
+      }))
     },
     model: {
       id: "square" // TODO: Use rounded rectangle
@@ -31,7 +34,12 @@ const renderCompositeLayer: Render = function*(state) {
       },
       shader: {
         id: "combine",
-        param: [idLayer]
+        param: [
+          {
+            idFramebuffer: idLayer,
+            mode: 1
+          }
+        ]
       },
       model: {
         id: "square"

@@ -22,22 +22,44 @@ const fsSource = `
 
   uniform sampler2D uTexture0;
   uniform sampler2D uTexture1;
+  uniform sampler2D uTexture2;
+  uniform sampler2D uTexture3;
+  uniform int uTexture0Mode;
+  uniform int uTexture1Mode;
+  uniform int uTexture2Mode;
+  uniform int uTexture3Mode;
   varying vec2 vTexCoord;
 
   void main() {
-    gl_FragColor = texture2D(uTexture0, vTexCoord) + texture2D(uTexture1, vTexCoord);
+    gl_FragColor =
+      vec4(uTexture0Mode, uTexture0Mode, uTexture0Mode, uTexture0Mode) * texture2D(uTexture0, vTexCoord) +
+      vec4(uTexture1Mode, uTexture1Mode, uTexture1Mode, uTexture1Mode) * texture2D(uTexture1, vTexCoord) +
+      vec4(uTexture2Mode, uTexture2Mode, uTexture2Mode, uTexture2Mode) * texture2D(uTexture2, vTexCoord) +
+      vec4(uTexture3Mode, uTexture3Mode, uTexture3Mode, uTexture3Mode) * texture2D(uTexture3, vTexCoord);
   }
 `;
 
-export type IdFramebuffers = string[];
+export type Layer = {
+  idFramebuffer: string;
+  mode: number;
+};
 
 export default create(vsSource, fsSource, (gl, program) => {
   const textureLocations = [
     gl.getUniformLocation(program, "uTexture0"),
-    gl.getUniformLocation(program, "uTexture1")
+    gl.getUniformLocation(program, "uTexture1"),
+    gl.getUniformLocation(program, "uTexture2"),
+    gl.getUniformLocation(program, "uTexture3")
   ];
 
-  const textureMap = [gl.TEXTURE0, gl.TEXTURE1];
+  const textureModeLocations = [
+    gl.getUniformLocation(program, "uTexture0Mode"),
+    gl.getUniformLocation(program, "uTexture1Mode"),
+    gl.getUniformLocation(program, "uTexture2Mode"),
+    gl.getUniformLocation(program, "uTexture3Mode")
+  ];
+
+  const GL_TEXTURE = [gl.TEXTURE0, gl.TEXTURE1, gl.TEXTURE2, gl.TEXTURE3];
 
   const programInfo = {
     program: program,
@@ -49,20 +71,23 @@ export default create(vsSource, fsSource, (gl, program) => {
       projectionMatrix: gl.getUniformLocation(program, "uProjectionMatrix"),
       modelViewMatrix: gl.getUniformLocation(program, "uModelViewMatrix")
     },
-    setup: (idFramebuffers: IdFramebuffers) => {
+    setup: (layers: Layer[]) => {
       // TODO: Type safety for `setup` params
-      let index = 0;
+      let lastIndex = -1;
 
-      // TODO: allow arbitrary number of textures, fill all slots. right now
-      // works for 1 or 2.
-      while (index < 2) {
-        for (const idFramebuffer of idFramebuffers) {
-          const { targetTexture } = getTexture(gl, idFramebuffer);
-          gl.activeTexture(textureMap[index]);
-          gl.bindTexture(gl.TEXTURE_2D, targetTexture);
-          gl.uniform1i(textureLocations[index], index);
-          index++;
-        }
+      layers.forEach(({ idFramebuffer, mode }, index) => {
+        const { targetTexture: texture } = getTexture(gl, idFramebuffer);
+        gl.activeTexture(GL_TEXTURE[index]);
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.uniform1i(textureLocations[index], index);
+        gl.uniform1i(textureModeLocations[index], mode);
+        lastIndex = index;
+      });
+
+      // Fill the rest of the shader with 0s
+      while (lastIndex < 4) {
+        lastIndex++;
+        gl.uniform1i(textureModeLocations[lastIndex], 0);
       }
     },
     teardown: () => {}
