@@ -20,7 +20,7 @@ export type IdShader = keyof typeof shaders;
 export type ShaderLookup =
   | {
       id: "default";
-      param: null;
+      param: { color: number[] };
     }
   | {
       id: "combine";

@@ -12,8 +12,10 @@ const vsSource = `
 `;
 
 const fsSource = `
+  uniform mediump vec4 uColor;
+
   void main() {
-    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+    gl_FragColor = uColor;
   }
 `;
 
@@ -23,6 +25,9 @@ export default create(vsSource, fsSource, (gl, shaderProgram) => {
   // Collect all the info needed to use the shader program.
   // Look up which attribute our shader program is using
   // for aVertexPosition and look up uniform locations.
+
+  const colorLocation = gl.getUniformLocation(shaderProgram, "uColor");
+
   const programInfo = {
     program: shaderProgram,
     attribLocations: {
@@ -34,6 +39,9 @@ export default create(vsSource, fsSource, (gl, shaderProgram) => {
         "uProjectionMatrix"
       ),
       modelViewMatrix: gl.getUniformLocation(shaderProgram, "uModelViewMatrix")
+    },
+    setup: ({ color }: { color: number[] }) => {
+      gl.uniform4fv(colorLocation, color);
     }
   };
 
