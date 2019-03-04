@@ -8,52 +8,86 @@
         left: 0;
         width: 100%;
         height: 100%;
+        pointer-events: none;
       }
 
       html,
-      body {
+      body,
+      .content {
         height: 100%;
         margin: 0;
         padding: 0;
+        background-color: #9f9fad;
       }
 
-      .content {
-        position: relative;
-        z-index: 1;
+      .composite-layers {
+        height: 50%;
         display: flex;
-        flex-wrap: wrap;
+        justify-content: center;
+        box-sizing: border-box;
+        border-bottom: 2px solid #9f9fad;
+      }
+
+      .single-layers {
+        height: 50%;
+        display: flex;
+        justify-content: flex-start;
+        overflow-x: scroll;
+        scroll-snap-type: x mandatory;
+      }
+
+      .single-layers::before {
+        flex: 0 0 auto;
+        width: 100vw;
+        content: "";
+        display: block;
+      }
+
+      .single-layers::after {
+        flex: 0 0 auto;
+        width: 100vw;
+        content: "";
+        display: block;
       }
 
       .layer-wrapper {
         position: relative;
-        margin: 32px;
+        scroll-snap-align: center;
+        flex: 0 0 auto;
+        width: 80vh;
+        height: 100%;
+        border-right: 1px solid #9f9fad;
+        border-left: 1px solid #9f9fad;
       }
 
       .layer {
-        width: 256px;
-        height: 256px;
-        box-shadow: 1px 1px 2px 2px rgba(0, 0, 0, 0.15);
+        width: 100%;
+        height: 100%;
         position: relative;
+        background-color: white;
       }
     </style>
   </head>
   <body>
     <div class="content">
-      <div class="layer-wrapper">
-        <p>first layer here</p>
-        <div class="layer" id="l1"></div>
+      <div class="composite-layers">
+        <div class="layer-wrapper">
+          <div class="layer" id="composite"></div>
+        </div>
       </div>
-      <div class="layer-wrapper">
-        <p>second layer here</p>
-        <div class="layer" id="l2"></div>
-      </div>
-      <div class="layer-wrapper">
-        <p>third layer here</p>
-        <div class="layer" id="l3"></div>
-      </div>
-      <div class="layer-wrapper">
-        <p>combined layer here</p>
-        <div class="layer" id="composite"></div>
+
+      <div class="single-layers">
+        <div class="layer-wrapper">
+          <div class="layer" id="l1"></div>
+        </div>
+
+        <div class="layer-wrapper">
+          <div class="layer" id="l2"></div>
+        </div>
+
+        <div class="layer-wrapper">
+          <div class="layer" id="l3"></div>
+        </div>
       </div>
     </div>
     <canvas id="gl-canvas"></canvas>

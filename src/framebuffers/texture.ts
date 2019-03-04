@@ -12,8 +12,8 @@ export const getTexture = memoize(
     gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
 
     // create to render to
-    const targetTextureWidth = 256;
-    const targetTextureHeight = 256;
+    const targetTextureWidth = 658;
+    const targetTextureHeight = 418;
     const targetTexture = gl.createTexture();
 
     gl.bindTexture(gl.TEXTURE_2D, targetTexture);
