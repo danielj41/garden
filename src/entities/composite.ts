@@ -16,7 +16,7 @@ const renderCompositeLayer: Render = function*(state) {
       id: "combine",
       param: Object.entries(state.layers).map(([idLayer, { blendMode }]) => ({
         idFramebuffer: idLayer,
-        mode: blendMode === "add" ? 1 : -5 // TODO: change to -1
+        mode: blendMode === "add" ? 0.5 : -5 // TODO: change to 1:-1 or enum or something
       }))
     },
     model: {

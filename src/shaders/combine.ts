@@ -24,10 +24,10 @@ const fsSource = `
   uniform sampler2D uTexture1;
   uniform sampler2D uTexture2;
   uniform sampler2D uTexture3;
-  uniform int uTexture0Mode;
-  uniform int uTexture1Mode;
-  uniform int uTexture2Mode;
-  uniform int uTexture3Mode;
+  uniform float uTexture0Mode;
+  uniform float uTexture1Mode;
+  uniform float uTexture2Mode;
+  uniform float uTexture3Mode;
   varying vec2 vTexCoord;
 
   void main() {
@@ -80,14 +80,14 @@ export default create(vsSource, fsSource, (gl, program) => {
         gl.activeTexture(GL_TEXTURE[index]);
         gl.bindTexture(gl.TEXTURE_2D, texture);
         gl.uniform1i(textureLocations[index], index);
-        gl.uniform1i(textureModeLocations[index], mode);
+        gl.uniform1f(textureModeLocations[index], mode);
         lastIndex = index;
       });
 
       // Fill the rest of the shader with 0s
       while (lastIndex < 4) {
         lastIndex++;
-        gl.uniform1i(textureModeLocations[lastIndex], 0);
+        gl.uniform1f(textureModeLocations[lastIndex], 0);
       }
     },
     teardown: () => {}
