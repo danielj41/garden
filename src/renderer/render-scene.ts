@@ -153,7 +153,7 @@ function renderWithModel(
     );
     gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
 
-    if (programInfo.attribLocations.texCoord) {
+    if (programInfo.attribLocations.texCoord !== undefined) {
       gl.bindBuffer(gl.ARRAY_BUFFER, buffers.texCoord);
       gl.vertexAttribPointer(
         programInfo.attribLocations.texCoord,
