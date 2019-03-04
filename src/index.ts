@@ -1,8 +1,8 @@
 import { configureStore } from "redux-starter-kit";
-import { reducer } from "./state";
-import nodesSlice from "./state/nodes";
 
+import { reducer } from "./state";
 import renderScene from "./renderer/render-scene";
+import { listen } from "./ui";
 
 main();
 
@@ -37,15 +37,7 @@ function main() {
     reducer: reducer
   });
 
-  document.addEventListener("click", () => {
-    store.dispatch(
-      nodesSlice.actions.updatePosition({
-        x: 0.1,
-        y: 0.01,
-        id: "1"
-      })
-    );
-  });
+  listen(store.dispatch);
 
   // Draw the scene
   const render = () => {

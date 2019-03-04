@@ -8,29 +8,21 @@ export interface Node {
   idLayer: string;
   x: number;
   y: number;
-  connectDown: boolean;
-  connectRight: boolean;
 }
 
 const initialState: Nodes = {
   "1": {
     idLayer: "l1",
-    connectDown: true,
-    connectRight: false,
     x: 0.5,
     y: 0.5
   },
   "2": {
     idLayer: "l2",
-    connectDown: true,
-    connectRight: false,
     x: 0.1,
     y: 0.1
   },
   "3": {
     idLayer: "l3",
-    connectDown: true,
-    connectRight: false,
     x: -0.4,
     y: -0.4
   }
@@ -59,6 +51,23 @@ export default createSlice({
       }>
     ) => {
       delete state[action.payload.id];
+    },
+    create: (
+      state: Nodes,
+      action: PayloadAction<{
+        id: string;
+        idLayer: string;
+        x: number;
+        y: number;
+      }>
+    ) => {
+      const { idLayer, x, y, id } = action.payload;
+
+      state[id] = {
+        idLayer,
+        x,
+        y
+      };
     }
   }
 });

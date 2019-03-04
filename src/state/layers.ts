@@ -12,13 +12,13 @@ export interface Layer {
 
 const initialState: Layers = {
   l1: {
-    blendMode: "subtract"
+    blendMode: "add"
   },
   l2: {
     blendMode: "add"
   },
   l3: {
-    blendMode: "add"
+    blendMode: "subtract"
   }
 };
 
